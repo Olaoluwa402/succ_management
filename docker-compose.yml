@@ -1,0 +1,24 @@
+version: "3.8"
+networks:
+  talent-management-backend:
+    driver: bridge
+services:
+  talent-m-db:
+    container_name: talent-m-db
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_PASSWORD=Folaranmi13
+      - MONGO_PATH=@localhost:27017/talent
+      - MONGO_USER=Eunice
+    env_file:
+      - ./.env
+    ports:
+      - "27017:27017"
+    networks:
+      - talent-management-backend
+    volumes:
+      - mondo-db:/data/db
+
+volumes:
+  mondo-db:
