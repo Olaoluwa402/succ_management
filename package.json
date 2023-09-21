@@ -31,7 +31,9 @@
     "mongoose": "^7.5.0",
     "morgan": "^1.10.0",
     "query-string": "^8.1.0",
-    "safe-compare": "^1.1.4"
+    "safe-compare": "^1.1.4",
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

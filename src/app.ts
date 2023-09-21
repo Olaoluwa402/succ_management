@@ -6,6 +6,7 @@ import helmet from "helmet";
 import compression from "compression";
 import { IController } from "./utils/interfaces/controller.interface";
 import ErrorMiddleware from "./middleware/error.middleware";
+import { config, logger } from "./config";
 
 class App {
   public express: Application;
@@ -54,7 +55,8 @@ class App {
 
   public listen(): void {
     this.express.listen(this.port, () => {
-      console.log(`server is listening on port ${this.port}`);
+      logger.info(`server running on port ${this.port}`);
+      logger.info(`server running on ${config.env} environment`);
     });
   }
 }
