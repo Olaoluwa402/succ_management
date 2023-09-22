@@ -16,10 +16,12 @@ class CriticalRoleService {
 
   async createCriticalRole(companyId: string, data: ICreateCriticalRole) {
     //duplicate critical job role within same organization should not exist, check if job role with same name is already created
-    const exist = await fetchOneQuery(CriticalRole, {
-      "jobRole.name": data.jobRole.name,
-      companyId: companyId,
-    });
+    // const exist = await fetchOneQuery(CriticalRole, {
+    //   "jobRole.name": data.jobRole.name,
+    //   companyId: companyId,
+    // });
+
+    const exist = true
 
     if (exist) {
       throw new BadRequestError("Job role already exist for the organization");

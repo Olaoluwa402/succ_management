@@ -33,7 +33,7 @@ class App {
 
   private initialiseDatabaseConnection(): void {
     mongoose
-      .connect("mongodb://127.0.0.1:27017/talent_management")
+      .connect(config.mongodb.db_url)
       .then(() => {
         console.log("Connected to MongoDB");
       })
