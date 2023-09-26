@@ -22,7 +22,7 @@ export interface IAnalytics {
 
 export interface IGetCriticalRoles extends IPagination {
   department?: string;
-  jobRoleName?: string;
+  "jobRole.name"?: string;
   recent?: string;
   date?: Date;
   search?: string;
@@ -31,8 +31,6 @@ export interface IGetCriticalRoles extends IPagination {
 export interface IGetCriticalRole {
   companyId: string;
 }
-
-
 
 export interface IUpdateCriticalRoles {
   jobRole?: {

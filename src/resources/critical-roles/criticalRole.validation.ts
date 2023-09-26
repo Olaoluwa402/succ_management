@@ -16,7 +16,7 @@ const criticalRole = Joi.object({
 
 const GetCriticalRoles = Joi.object({
   department: Joi.string().optional(),
-  jobRoleName: Joi.string().optional(),
+  "jobRole.name": Joi.string().optional(),
   page: Joi.string().optional(),
   limit: Joi.string().optional(),
 });
