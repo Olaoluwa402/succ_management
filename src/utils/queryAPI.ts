@@ -1,10 +1,23 @@
+export interface QueryResult<T> {
+  data: any;
+  paging: {
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+    nextPage: number | null;
+    prevPage: number | null;
+  };
+}
+
 export default class APIQuery<T> {
   public Query: any;
   public QueryString: any;
+  public QueryResponse: QueryResult<T> | null = null;
 
   constructor(Query: T, QueryString: any) {
     this.Query = Query;
     this.QueryString = QueryString;
+    this.QueryResponse = null;
   }
 
   Filter() {
@@ -46,7 +59,25 @@ export default class APIQuery<T> {
     const skip = (page - 1) * limit;
 
     // IMPLEMENTING PAGINATION
+    //this.Query = this.Query.skip(skip).limit(limit);
+    const dataCount = this.Query.countDocuments();
+    const totalPage = limit === 0 ? 1 : Math.ceil(dataCount / limit);
+
+    const nextPage = page >= totalPage ? null : page + 1;
+    const prevPage = page === 1 ? null : page - 1;
+
     this.Query = this.Query.skip(skip).limit(limit);
+
+    this.QueryResponse = {
+      paging: {
+        totalCount: dataCount,
+        totalPages: totalPage,
+        currentPage: page,
+        nextPage,
+        prevPage,
+      },
+      data: this.Query,
+    };
 
     return this;
   }

@@ -6,6 +6,7 @@ import {
   GetCriticalRoles,
   criticalRole,
   UpdateCriticalRoles,
+  Analytics,
 } from "./criticalRole.validation";
 
 import httpStatus from "http-status";
@@ -32,6 +33,12 @@ class CriticalRoleController implements IController {
       `${this.path}/allRoles`,
       validationMiddleware(GetCriticalRoles, valType.QEURY),
       this.getRoles
+    );
+
+    this.router.get(
+      `${this.path}/analytics`,
+      //validationMiddleware(Analytics, valType.QEURY),
+      this.getAnalytics
     );
     this.router.get(`${this.path}/:id`, this.getRole);
 
@@ -114,6 +121,29 @@ class CriticalRoleController implements IController {
         statusCode: httpStatus.CREATED,
         payload: role,
         message: "critical role",
+      });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getAnalytics = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const query = req.query;
+      const companyId = "req.user.companyID";
+      const analytics = await this.criticalRoleService.getAnalytics(
+        companyId,
+        query
+      );
+
+      return successResponse(res, {
+        statusCode: httpStatus.OK,
+        payload: analytics,
+        message: "Analytics",
       });
     } catch (error: any) {
       next(error);

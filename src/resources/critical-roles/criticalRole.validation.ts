@@ -35,4 +35,11 @@ const UpdateCriticalRoles = Joi.object({
   criticality: Joi.string().optional(),
 });
 
-export { criticalRole, GetCriticalRoles, UpdateCriticalRoles };
+const Analytics = Joi.object({
+  organizationId: Joi.string().required(),
+  totalTalents: Joi.number().required(),
+  totalCriticalRole: Joi.number().required,
+  vacantRoles: Joi.number().required(),
+});
+
+export { criticalRole, GetCriticalRoles, UpdateCriticalRoles, Analytics };

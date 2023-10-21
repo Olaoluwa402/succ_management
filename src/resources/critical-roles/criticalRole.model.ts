@@ -1,7 +1,8 @@
 import { boolean } from "joi";
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 export interface ICriticalRole extends Document {
+  sucessors: { type: ObjectId }[];
   jobRole: {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ export interface ICriticalRole extends Document {
 }
 
 const CriticalRoleSchema = new Schema<ICriticalRole>({
+  sucessors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Talent" }],
   jobRole: {
     id: {
       type: String,

@@ -1,6 +1,7 @@
 import { ICreateCriticalRole } from "./criticalRole.interface";
 
 import CriticalRole from "./criticalRole.model";
+import Talent from "../talent/talent.model";
 import { IUpdateCriticalRoles } from "./criticalRole.interface";
 import { subDays } from "date-fns";
 import {
@@ -42,7 +43,7 @@ class CriticalRoleService {
         companyId,
         createdAt: { $gt: new Date(recentDate) },
         isDeleted: false,
-      }),
+      }).populate("successors"),
       query
     )
       .Filter()
@@ -136,6 +137,65 @@ class CriticalRoleService {
     });
 
     return role;
+  }
+
+  async getAnalytics(companyId: any, query: any) {
+    try {
+      const matchQuery = { $match: { companyId: companyId } };
+
+      const totalAggregate = await CriticalRole.aggregate([
+        matchQuery,
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            count: 1,
+            totalSucessors: {
+              $cond: [
+                {
+                  $and: [
+                    { $isArray: "$sucessors" },
+                    { $ne: [{ $size: "$sucessors" }, 0] },
+                  ],
+                },
+                { $size: "$sucessors" },
+                0,
+              ],
+            },
+          },
+        },
+      ]).exec();
+
+      const totalCriticalRole = totalAggregate[0].count;
+      const totalSuccesors = totalAggregate[0].totalSucessors;
+
+      const totalTalentAggregate = await Talent.aggregate([
+        matchQuery,
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
+        },
+      ]).exec();
+
+      const totalTalent = totalTalentAggregate[0].count;
+      console.log(totalTalent, "totalTalent");
+
+      return {
+        totalCriticalRole,
+        totalTalent,
+        totalSuccesors,
+      };
+
+      // You can use totalCriticalRole and totalTalent for further processing.
+    } catch (error) {
+      console.error("Error while fetching analytics:", error);
+    }
   }
 
   async updateCriticalRole(
